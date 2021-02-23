@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"./util"
+	"../util"
 )
 
 func BogoSort(numbers []int) []int {
