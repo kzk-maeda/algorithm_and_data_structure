@@ -2,6 +2,9 @@
 #include <vector>
 using namespace std;
 
+// global variables
+vector< vector<int> > memo;
+
 bool recursive_partial_sum(int i, int w, const vector<int> &a) {
   // base case
   if (i == 0) {
@@ -18,6 +21,27 @@ bool recursive_partial_sum(int i, int w, const vector<int> &a) {
   return false;
 }
 
+// 0：false、1: true
+int recursive_partial_sum_with_memo(int i, int w, const vector<int> a) {
+  // base case
+  if (i == 0) {
+    if (w == 0) return true;
+    return false;
+  }
+
+  // check memo
+  if (memo[i][w] != -1) return memo[i][w];
+
+  // when not choice a[i-1]
+  if (recursive_partial_sum_with_memo(i-1, w, a)) return memo[i][w] = 1;
+
+  // when choice a[i-1]
+  if (recursive_partial_sum_with_memo(i-1, w-a[i-1], a)) return memo[i][w] = 1;
+
+  return memo[i][w] = 0;
+
+}
+
 int main() {
   int N, W;
   cout << "Input N, W : " << endl;
@@ -29,6 +53,11 @@ int main() {
 
   // culc recursively
   if (recursive_partial_sum(N, W, a)) cout << "Yes" << endl;
+  else cout << "No" << endl;
+
+  // culc with memo
+  memo.assign(N+1, vector<int>(W+1, -1));
+  if (recursive_partial_sum_with_memo(N, W, a)) cout << "Yes" << endl;
   else cout << "No" << endl;
 
 }
